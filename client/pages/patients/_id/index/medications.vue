@@ -4,5 +4,8 @@
 <script>
 export default {
   name: 'PatientsEncounters',
+  head() {
+    return { title: 'Patient Medications' }
+  },
 }
 </script>

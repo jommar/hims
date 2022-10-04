@@ -1,6 +1,15 @@
 <template>
   <div>
-    <v-list outlined>
+    <v-alert
+      v-if="!patients"
+      type="error"
+      border="left"
+      colored-border
+      prominent
+    >
+      No patient available.
+    </v-alert>
+    <v-list outlined v-else>
       <v-list-item
         class="py-3"
         v-for="(p, index) in patients"

@@ -26,6 +26,9 @@
 <script>
 export default {
   name: 'PatientsDetails',
+  head() {
+    return { title: 'Patient Details' }
+  },
   data() {
     return {
       details: {},

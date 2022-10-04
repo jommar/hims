@@ -39,6 +39,9 @@
 <script>
 export default {
   name: 'PatientsCreate',
+  head() {
+    return { title: 'New Patient' }
+  },
   computed: {
     resource() {
       return {

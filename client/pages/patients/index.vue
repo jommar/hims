@@ -1,9 +1,24 @@
 <template>
   <div>
     <div class="d-flex align-center mb-8">
-      <div class="flex-grow-1 title">
+      <div class="title">
         Patient List
       </div>
+      <v-form class="mx-8 flex-grow-1" @submit.prevent="searchPatient">
+        <v-text-field label="Patient Name" v-model="patients.search">
+          <template #append-outer>
+            <v-btn
+              type="submit"
+              color="primary"
+              rounded
+              :loading="patients.isLoading"
+            >
+              <v-icon left>fa-search</v-icon>
+              Search
+            </v-btn>
+          </template>
+        </v-text-field>
+      </v-form>
       <v-btn to="/patients/create" color="primary">
         <v-icon left>fa-plus-circle</v-icon>
         New Patient
@@ -42,6 +57,9 @@
 <script>
 export default {
   name: 'PatientList',
+  head() {
+    return { title: 'Patient List' }
+  },
   computed: {
     isCreatingPatient() {
       return this.$route.path == '/patients/create'
@@ -52,8 +70,19 @@ export default {
       patients: {
         isLoading: false,
         list: [],
+        search: '',
       },
     }
+  },
+  methods: {
+    async searchPatient() {
+      this.patients.isLoading = true
+      this.patients.list = await this.$axios({
+        method: 'get',
+        url: `/fhir/Patient?name=${this.patients.search}`,
+      }).then((r) => r.data?.entry)
+      this.patients.isLoading = false
+    },
   },
   async mounted() {
     this.patients.isLoading = true
