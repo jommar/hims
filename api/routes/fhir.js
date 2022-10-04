@@ -10,6 +10,9 @@ router.get('/', function (req, res, next) {
 router.put('/:resource/:id', function (req, res, next) {
   res.send({ data: { message: 'Welcome to FHIR API2' } })
 })
+router.post('/:resource', async function (req, res, next) {
+  res.send(await fhirController.postResource(req))
+})
 router.get('/:resource', async function (req, res, next) {
   res.send(await fhirController.getResource(req))
 })
