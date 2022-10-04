@@ -1,9 +1,6 @@
 <template>
   <div>
     <div class="d-flex align-center mb-8">
-      <div class="title">
-        Patient List
-      </div>
       <v-form class="mx-8 flex-grow-1" @submit.prevent="searchPatient">
         <v-text-field label="Patient Name" v-model="patients.search">
           <template #append-outer>

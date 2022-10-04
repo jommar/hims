@@ -9,17 +9,17 @@
     >
       No patient available.
     </v-alert>
-    <v-list outlined v-else>
+    <v-list v-else class="pa-0">
       <v-list-item
-        class="py-3"
+        class="py-3 my-3 border-2"
+        :class="getColorByGender(p.resource.gender)"
         v-for="(p, index) in patients"
         :key="index"
-        :to="`/patients/${p.resource.id}`"
       >
         <v-list-item-avatar color="secondary">
           {{ getInitials(p.resource?.name?.[0]) }}
         </v-list-item-avatar>
-        <div style="width: 100%;">
+        <div class="flex-grow-1">
           <div class="title secondary--text">
             {{ p.resource?.name?.[0]?.text }}
           </div>
@@ -28,6 +28,16 @@
             <div class="col-auto">Birth Date: {{ p.resource.birthDate }}</div>
           </div>
         </div>
+        <v-list-item-action>
+          <v-btn
+            icon
+            class="pa-6"
+            color="white"
+            :to="`/patients/${p.resource.id}`"
+          >
+            <v-icon>fa-eye</v-icon>
+          </v-btn>
+        </v-list-item-action>
       </v-list-item>
     </v-list>
   </div>
@@ -39,6 +49,9 @@ export default {
     patients: Array,
   },
   methods: {
+    getColorByGender(gender) {
+      return (gender == 'male' ? 'blue' : 'pink') + ' darken-4'
+    },
     getInitials(name) {
       return `${name?.given[0].substring(0, 1)}${name?.family.substring(0, 1)}`
     },
