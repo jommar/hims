@@ -7,8 +7,8 @@ const fhirController = require(`${global.appRoot}/controllers/FhirController.js`
 router.get('/', function (req, res, next) {
   res.send({ data: { message: 'Welcome to FHIR API' } })
 })
-router.put('/:resource/:id', function (req, res, next) {
-  res.send({ data: { message: 'Welcome to FHIR API2' } })
+router.put('/:resource/:id', async function (req, res, next) {
+  res.send(await fhirController.putResource(req))
 })
 router.post('/:resource', async function (req, res, next) {
   res.send(await fhirController.postResource(req))

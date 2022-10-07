@@ -2,7 +2,7 @@
   <div>
     <div class="d-flex align-center mb-8">
       <v-form class="mx-8 flex-grow-1" @submit.prevent="searchPatient">
-        <v-text-field label="Patient Name" v-model="patients.search">
+        <FormTextField label="Patient Name" v-model="patients.search">
           <template #append-outer>
             <v-btn
               type="submit"
@@ -14,7 +14,7 @@
               Search
             </v-btn>
           </template>
-        </v-text-field>
+        </FormTextField>
       </v-form>
       <v-btn to="/patients/create" color="primary">
         <v-icon left>fa-plus-circle</v-icon>

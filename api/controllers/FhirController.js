@@ -41,4 +41,13 @@ module.exports = {
       .then((r) => r.data)
       .catch((e) => e)
   },
+  async putResource(req) {
+    return await $axios({
+      method: 'put',
+      data: req.body,
+      url: `${api}/${req.params.resource}/${req.params.id}`,
+    })
+      .then((r) => r.data)
+      .catch((e) => e)
+  },
 }

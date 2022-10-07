@@ -1,5 +1,7 @@
 <template>
-  <v-container fluid>ENCOUNTERS</v-container>
+  <v-container fluid>
+    <PagesEncountersList :patientId="$route.params.id" />
+  </v-container>
 </template>
 <script>
 export default {
