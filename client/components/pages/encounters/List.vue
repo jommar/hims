@@ -1,10 +1,25 @@
 <template>
   <div>
-    <v-alert type="error" prominent border="left" colored-border v-if="encounters.length == 0">
+    <SpinnerCenter v-if="isLoading" />
+    <v-alert
+      type="error"
+      prominent
+      border="left"
+      colored-border
+      v-else-if="encounters.length == 0"
+    >
       No encounters available
     </v-alert>
-    <v-list v-else>
-      <v-list-item v-for="(i, index) in encounters" :key="index">
+    <v-list v-else class="py-0">
+      <v-list-item
+        v-for="(i, index) in encounters"
+        :key="index"
+        :disabled="i.status == 'cancelled'"
+        :class="{
+          error: i.status == 'cancelled',
+          'darken-4': i.status == 'cancelled',
+        }"
+      >
         <v-list-item-content>
           <v-list-item-title> {{ i.id }} | {{ i.status }} </v-list-item-title>
           <v-list-item-subtitle>
@@ -51,6 +66,7 @@
         </v-list-item-content>
         <div>
           <v-btn
+            v-if="i.status != 'cancelled'"
             small
             icon
             color="error"
@@ -71,6 +87,7 @@ export default {
   },
   data() {
     return {
+      isLoading: false,
       encounters: [],
       includes: [],
     }
@@ -96,18 +113,23 @@ export default {
       return item
     },
     async fetchEncounters() {
+      this.isLoading = true
       const response = await this.$axios({
         method: 'get',
         url: `/fhir/Encounter?subject=Patient/${this.patientId}&status:not=cancelled&_revinclude=List:encounter`,
       }).then((r) => r?.data)
 
-      this.encounters = response.entry
-        ?.filter((i) => i.search.mode == 'match')
-        ?.map((i) => i.resource) || []
+      this.encounters =
+        response.entry
+          ?.filter((i) => i.search.mode == 'match')
+          ?.map((i) => i.resource) || []
 
-      this.includes = response.entry
-        ?.filter((i) => i.search.mode == 'include')
-        ?.map((i) => i.resource) || []
+      this.includes =
+        response.entry
+          ?.filter((i) => i.search.mode == 'include')
+          ?.map((i) => i.resource) || []
+
+      this.isLoading = false
     },
   },
 }
