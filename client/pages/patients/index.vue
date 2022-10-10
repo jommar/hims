@@ -1,23 +1,39 @@
 <template>
   <div>
     <div class="d-flex align-center mb-8">
-      <div class="title">
-        Patient List
-      </div>
-      <v-form class="mx-8 flex-grow-1" @submit.prevent="searchPatient">
-        <v-text-field label="Patient Name" v-model="patients.search">
-          <template #append-outer>
-            <v-btn
-              type="submit"
-              color="primary"
-              rounded
-              :loading="patients.isLoading"
-            >
-              <v-icon left>fa-search</v-icon>
-              Search
-            </v-btn>
-          </template>
-        </v-text-field>
+      <v-form
+        class="mx-8 flex-grow-1 d-flex align-center"
+        @submit.prevent="searchPatient"
+      >
+        <FormTextField
+          dense
+          label="Last Name"
+          v-model="patients.search.last"
+          class="mr-2 flex-grow-1"
+        />
+        <FormTextField
+          dense
+          label="First Name"
+          v-model="patients.search.first"
+          class="mx-2 flex-grow-1"
+        />
+        <FormTextField
+          dense
+          label="Middle Name"
+          v-model="patients.search.middle"
+          class="mx-2 flex-grow-1"
+        />
+        <v-btn
+          type="submit"
+          color="primary"
+          class="ml-2"
+          rounded
+          fab
+          small
+          :loading="patients.isLoading"
+        >
+          <v-icon>fa-search</v-icon>
+        </v-btn>
       </v-form>
       <v-btn to="/patients/create" color="primary">
         <v-icon left>fa-plus-circle</v-icon>
@@ -70,7 +86,11 @@ export default {
       patients: {
         isLoading: false,
         list: [],
-        search: '',
+        search: {
+          last: '',
+          first: '',
+          middle: '',
+        },
       },
     }
   },
@@ -79,7 +99,7 @@ export default {
       this.patients.isLoading = true
       this.patients.list = await this.$axios({
         method: 'get',
-        url: `/fhir/Patient?name=${this.patients.search}`,
+        url: `/fhir/Patient?family:contains=${this.patients.search.last}&given:contains=${this.patients.search.first}&name:contains=${this.patients.search.middle}`,
       }).then((r) => r.data?.entry)
       this.patients.isLoading = false
     },
