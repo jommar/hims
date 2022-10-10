@@ -26,6 +26,7 @@
           <div class="d-flex">
             <div class="col-auto">Gender: {{ p.resource.gender }}</div>
             <div class="col-auto">Birth Date: {{ p.resource.birthDate }}</div>
+            <div class="col-auto">Age: {{ getAge(p.resource.birthDate) }}</div>
           </div>
         </div>
         <v-list-item-action>
@@ -49,6 +50,24 @@ export default {
     patients: Array,
   },
   methods: {
+    getAge(date) {
+      const now = new Date().getTime()
+      const difference = now - new Date(date).getTime()
+      const age = {
+        day: difference / (1000 * 3600 * 24),
+        get year() {
+          return Math.floor(this.day / 365)
+        },
+        get month() {
+          return Math.floor(this.day * 0.032855)
+        },
+        get days() {
+          return Math.floor(this.day)
+        },
+      }
+      const currentAge = Object.entries(age).filter((i, index) => index > 0 && i[1] > 0)[0]
+      return `${currentAge[1]}${currentAge[0][0]}`
+    },
     getColorByGender(gender) {
       return (gender == 'male' ? 'blue' : 'pink') + ' darken-4'
     },
